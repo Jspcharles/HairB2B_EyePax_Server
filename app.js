@@ -10,6 +10,7 @@ var users = require('./routes/users');
 var stylist = require('./routes/stylist');
 var login = require('./routes/login');
 var home = require('./routes/home');
+var stylist_db = require('./routes/Stylist_DB');
 
 var app = express();
 
@@ -30,6 +31,7 @@ app.use('/users', users);
 app.use('/api/stylist', stylist);
 app.use('/api/login', login);
 app.use('/api/home', home);
+app.use('/api/stylist_db', stylist_db);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

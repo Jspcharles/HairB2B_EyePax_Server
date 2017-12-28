@@ -5,11 +5,11 @@ var fs = require('fs');
 
 /* GET users listing. */
 
-router.get('/getsamplestylist', function(req, res) {
-    res.setHeader('Content-Type', 'application/json');
-    res.send({name: 'Joseph Charles',
-        skills: ['bridal', 'rebonding'], address: 'Sydney', cost: 120});
-});
+// router.get('/getsamplestylist', function(req, res) {
+//     res.setHeader('Content-Type', 'application/json');
+//     res.send({name: 'Joseph Charles',
+//         skills: ['bridal', 'rebonding'], address: 'Sydney', cost: 120});
+// });
 
 router.get('/getStylistName', function(req, res) {
     res.setHeader('Content-Type', 'application/json');
@@ -56,7 +56,7 @@ function base64_encode(file) {
             cost2: 220,
             telephone: '0771524452',
             skill: ['Colour correction' , 'Hair painting'],
-            description: 'I\'ve spent 10 years further developing and growing my skill set in a busy and reputable organisation in Sydney. In this time I\'ve been awarded \'stylist of the year\', \'educator of the year\' and \'hall of fame\'. I left the organisation as Director of Education and continue my career as a freelance educator, stylist and salon owner.'
+            description: 'I have ve spent 10 years further developing and growing my skill set in a busy and reputable organisation in Sydney. In this time I have been awarded stylist of the year, educator of the year and hall of fame. I left the organisation as Director of Education and continue my career as a freelance educator, stylist and salon owner.'
         },
         {
             id: 3,
@@ -86,51 +86,47 @@ function base64_encode(file) {
             cost2: 325,
             telephone: '0770721234',
             skill: ['Advanced colouring' , 'Hair painting' , 'Colour correction', 'Bridal'],
-            description: 'With 27 years experience, I have covered a lot of ground in our industry, and am passionate about handing this knowledge on.\n' +
-            '\n' +
-            'Technically, I believe in providing an attention to detail to every client whether its a set of foils or a zero fade.\n' +
-            '\n' +
-            'Being an award winning multi site Shop Owner, my skills are not just limited to just the technical side of our trade. Check out Mister Chop Shop and Bondi Beach Chop Shopy.'
+            description: 'With 27 years experience, I have covered a lot of ground in our industry, and am passionate about handing this knowledge on, Technically, I believe in providing an attention to detail to every client whether its a set of foils or a zero fade.Being an award winning multi site Shop Owner, my skills are not just limited to just the technical side of our trade. Check out Mister Chop Shop and Bondi Beach Chop Shopy.'
         }
 
     ];
         // filtered stylist by melbourne
-        router.get('/getStylist/loc', function(req, res) {
-
-            var filterByLoc = [];
-
-            for (var i=0 ; i<stylistList.length;i++){
-                if(stylistList[i].preferred_location === 'Melbourne'){
-                    filterByLoc.push(stylistList[i]);
-                }
-
-                // else if (stylistList[i].preferred_location === 'Sydney'){
-                //     filterByLoc.push(stylistList[i]);
-                // }
-                //
-                // else if (stylistList[i].preferred_location === 'Perth'){
-                //     filterByLoc.push(stylistList[i]);
-                // }
-            }
-
-            res.setHeader('Content-Type', 'application/json');
-            res.send(filterByLoc);
-        });
-
-        stylistList.sort(function (a, b) {
-            if (a.rate > b.rate){
-                return -1;
-            }
-            else if (a.rate === b.rate){
-                return 0;
-            }
-            return 1;
-        });
-
-        router.get('/getstylists/skill', function (req, res, next) {
-
-        res.setHeader('Content-Type', 'application/json');
-        res.status(200).send(result);
-});
+//         router.get('/getStylist/loc', function(req, res) {
+//
+//             var filterByLoc = [];
+//
+//             for (var i=0 ; i<stylistList.length;i++){
+//                 if(stylistList[i].preferred_location === 'Melbourne'){
+//                     filterByLoc.push(stylistList[i]);
+//                 }
+//
+//                 // else if (stylistList[i].preferred_location === 'Sydney'){
+//                 //     filterByLoc.push(stylistList[i]);
+//                 // }
+//                 //
+//                 // else if (stylistList[i].preferred_location === 'Perth'){
+//                 //     filterByLoc.push(stylistList[i]);
+//                 // }
+//             }
+//
+//             res.setHeader('Content-Type', 'application/json');
+//             res.send(filterByLoc);
+//         });
+//
+//         stylistList.sort(function (a, b) {
+//             if (a.rate > b.rate){
+//                 return -1;
+//             }
+//             else if (a.rate === b.rate){
+//                 return 0;
+//             }
+//             return 1;
+//         });
+//
+//         router.get('/getstylists/skill', function (req, res, next) {
+//
+//         res.setHeader('Content-Type', 'application/json');
+//         res.status(200).send(result);
+// });
 
 module.exports = router;

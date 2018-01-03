@@ -454,6 +454,43 @@ router.get('/stylist_details/byName/:name', function(req, res) {
     res.send(stylistLists);
 });
 
+router.get('/stylist_details/calendar/:id', function(req, res) {
+
+    var r = syncSql.mysql(
+        {
+            host: 'localhost',
+            user: 'root',
+            password: '',
+            database: 'hairb2b_db',
+            port: '3306'
+        },
+        "SELECT * FROM trn_busy_date WHERE trn_busy_date.stylist_id =" +req.params.id
+    );
+
+    var stylistLists = [];
+
+    for (var i = 0; i < r.data.rows.length; i++){
+        var stylist = {};
+        stylist.id = r.data.rows[i].id;
+        stylist.stylist_id = r.data.rows[i].stylist_id;
+        stylist.time_slot_busy_date_1 = r.data.rows[i].time_slot_busy_date_1;
+        stylist.time_slot_busy_date_2 = r.data.rows[i].time_slot_busy_date_2;
+        stylist.busy_date_1 = r.data.rows[i].busy_date_1;
+        stylist.busy_date_2 = r.data.rows[i].busy_date_2;
+        stylist.day_busy = r.data.rows[i].day_busy;
+        stylistLists.push(stylist);
+    }
+
+    console.log(r);
+
+
+    res.setHeader('Content-Type', 'application/json');
+    res.send(stylistLists);
+
+    console.log(stylistLists);
+});
+
+
 
 
     // router.get('/stylist_details/job_role', function(req, res) {

@@ -496,7 +496,7 @@ router.get('/stylist_details/gallery/:id', function(req, res) {
 router.get('/stylist_details/busy_date/:id', function(req, res) {
     var output = syncSql.mysql(
         connection,
-        "SELECT stylist_id,busy_date,time_slot from trn_time_slot, trn_busy_date where (trn_busy_date.time_slot_id = trn_time_slot.id) and trn_busy_date.stylist_id = " +req.params.id
+        "SELECT stylist_id,busy_date,time_slot from trn_time_slot, trn_busy_date_stylist where (trn_busy_date_stylist.time_slot_id = trn_time_slot.id) and trn_busy_date_stylist.stylist_id = " +req.params.id
     );
 
     // console.log(output.data.rows);

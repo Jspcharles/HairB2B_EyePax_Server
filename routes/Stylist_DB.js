@@ -179,7 +179,7 @@ router.get('/stylist_details', function(req, res) {
             stylist.busy_date.push(q.data.rows[j].busy_date);
 
         }
-        // console.log(r);
+        // console.log(q);
 
 
 
@@ -230,6 +230,7 @@ router.get('/stylist_details/:id', function(req, res) {
         stylist.rating = output.data.rows[i].rating;
         stylist.terms_and_condotions = output.data.rows[i].terms_and_condotions;
         stylist.skill = [];
+        stylist.busy_date = [];
 
         var r = syncSql.mysql(
             connection,
@@ -240,6 +241,17 @@ router.get('/stylist_details/:id', function(req, res) {
             stylist.skill.push(r.data.rows[j].skill);
         }
         // console.log(r);
+
+        var q = syncSql.mysql(
+            connection,
+            "select * from trn_busy_date_stylist where stylist_id = "+stylist.id
+        );
+        for (var j =0 ; j<q.data.rows.length;j++){
+
+            stylist.busy_date.push(q.data.rows[j].busy_date);
+
+        }
+        // console.log(q);
 
         stylistLists.push(stylist);
     }
@@ -290,6 +302,7 @@ router.get('/stylist_details/bylocation/:location', function(req, res) {
         stylist.rating = output.data.rows[i].rating;
         stylist.terms_and_condotions = output.data.rows[i].terms_and_condotions;
         stylist.skill = [];
+        stylist.busy_date = [];
 
         var r = syncSql.mysql(
             connection,
@@ -300,6 +313,17 @@ router.get('/stylist_details/bylocation/:location', function(req, res) {
             stylist.skill.push(r.data.rows[j].skill);
         }
         // console.log(r);
+
+        var q = syncSql.mysql(
+            connection,
+            "select * from trn_busy_date_stylist where stylist_id = "+stylist.id
+        );
+        for (var j =0 ; j<q.data.rows.length;j++){
+
+            stylist.busy_date.push(q.data.rows[j].busy_date);
+
+        }
+        // console.log(q);
 
         stylistLists.push(stylist);
     }
@@ -350,6 +374,7 @@ router.get('/stylist_details/bySkill/:skill', function(req, res) {
         stylist.rating = output.data.rows[i].rating;
         stylist.terms_and_condotions = output.data.rows[i].terms_and_condotions;
         stylist.skill = [];
+        stylist.busy_date = [];
 
         var r = syncSql.mysql(
             connection,
@@ -364,6 +389,17 @@ router.get('/stylist_details/bySkill/:skill', function(req, res) {
         // console.log(stylist.id);
         // console.log(stylist.skill);
         // console.log('-----------');
+
+        var q = syncSql.mysql(
+            connection,
+            "select * from trn_busy_date_stylist where stylist_id = "+stylist.id
+        );
+        for (var j =0 ; j<q.data.rows.length;j++){
+
+            stylist.busy_date.push(q.data.rows[j].busy_date);
+
+        }
+        // console.log(q);
         stylistLists.push(stylist);
     }
 
@@ -418,6 +454,7 @@ router.get('/stylist_details/byName/:name', function(req, res) {
         stylist.rating = output.data.rows[i].rating;
         stylist.terms_and_condotions = output.data.rows[i].terms_and_condotions;
         stylist.skill = [];
+        stylist.busy_date = [];
 
         var r = syncSql.mysql(
             connection,
@@ -432,6 +469,17 @@ router.get('/stylist_details/byName/:name', function(req, res) {
         // console.log(stylist.id);
         // console.log(stylist.skill);
         // console.log('-----------');
+
+        var q = syncSql.mysql(
+            connection,
+            "select * from trn_busy_date_stylist where stylist_id = "+stylist.id
+        );
+        for (var j =0 ; j<q.data.rows.length;j++){
+
+            stylist.busy_date.push(q.data.rows[j].busy_date);
+
+        }
+        // console.log(q);
         stylistLists.push(stylist);
     }
 

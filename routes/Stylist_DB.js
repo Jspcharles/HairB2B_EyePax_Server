@@ -174,12 +174,18 @@ router.get('/stylist_details', function(req, res) {
             connection,
             "select * from trn_busy_date_stylist where stylist_id = "+stylist.id
         );
-        for (var j =0 ; j<q.data.rows.length;j++){
+        for (var k =0 ; k<q.data.rows.length;k++){
 
-            stylist.busy_date.push(q.data.rows[j].busy_date);
+            stylist.busy_date.push(q.data.rows[k].busy_date);
 
         }
         // console.log(q);
+
+        var s = syncSql.mysql(
+            connection,
+            "select type from trn_type, trn_stylist where trn_stylist.type_id = trn_type.id and trn_stylist.id = "+stylist.id
+        );
+        stylist.type = s.data.rows[0].type;
 
 
 
@@ -253,6 +259,12 @@ router.get('/stylist_details/:id', function(req, res) {
         }
         // console.log(q);
 
+        var s = syncSql.mysql(
+            connection,
+            "select type from trn_type, trn_stylist where trn_stylist.type_id = trn_type.id and trn_stylist.id = "+stylist.id
+        );
+        stylist.type = s.data.rows[0].type;
+
         stylistLists.push(stylist);
     }
 
@@ -324,6 +336,12 @@ router.get('/stylist_details/bylocation/:location', function(req, res) {
 
         }
         // console.log(q);
+
+        var s = syncSql.mysql(
+            connection,
+            "select type from trn_type, trn_stylist where trn_stylist.type_id = trn_type.id and trn_stylist.id = "+stylist.id
+        );
+        stylist.type = s.data.rows[0].type;
 
         stylistLists.push(stylist);
     }
@@ -400,6 +418,13 @@ router.get('/stylist_details/bySkill/:skill', function(req, res) {
 
         }
         // console.log(q);
+
+        var s = syncSql.mysql(
+            connection,
+            "select type from trn_type, trn_stylist where trn_stylist.type_id = trn_type.id and trn_stylist.id = "+stylist.id
+        );
+        stylist.type = s.data.rows[0].type;
+
         stylistLists.push(stylist);
     }
 
@@ -480,6 +505,97 @@ router.get('/stylist_details/byName/:name', function(req, res) {
 
         }
         // console.log(q);
+
+        var s = syncSql.mysql(
+            connection,
+            "select type from trn_type, trn_stylist where trn_stylist.type_id = trn_type.id and trn_stylist.id = "+stylist.id
+        );
+        stylist.type = s.data.rows[0].type;
+
+        stylistLists.push(stylist);
+    }
+
+    stylistLists.sort(function (a, b) {
+        if (a.rating > b.rating){
+            return -1;
+        }
+        else if (a.rating === b.rating){
+            return 0;
+        }
+        return 1;
+    });
+
+    // console.log(stylistLists);
+    res.setHeader('Content-Type', 'application/json');
+    res.send(stylistLists);
+});
+
+//Retrieve stylist by type wise
+router.get('/stylist_details/byType/:type', function(req, res) {
+
+    var output = syncSql.mysql(
+        connection,
+        // "select * from trn_stylist where address_line_1 = '" +req.params.skill+"'"
+
+        "select * from trn_stylist, trn_type where trn_stylist.type_id = trn_type.id and trn_type.type = '" +req.params.type+"'"
+    );
+    // console.log(req.params.skill);
+
+    // console.log(output.data.rows);s
+    // res.send(output.data.rows);
+
+    var stylistLists = [];
+
+    for (var i = 0; i < output.data.rows.length; i++){
+        var stylist = {};
+        stylist.id = output.data.rows[i].id;
+        stylist.first_name = output.data.rows[i].first_name;
+        stylist.last_name = output.data.rows[i].last_name;
+        stylist.profile_pic = base64_encode(path.resolve(output.data.rows[i].profile_pic));
+        stylist.address_line_1 = output.data.rows[i].address_line_1;
+        stylist.address_line_2 = output.data.rows[i].address_line_2;
+        stylist.city = output.data.rows[i].city;
+        stylist.state = output.data.rows[i].state;
+        stylist.mrng_cost = output.data.rows[i].mrng_cost;
+        stylist.evng_cost = output.data.rows[i].evng_cost;
+        stylist.telephone = output.data.rows[i].telephone;
+        stylist.description = output.data.rows[i].description;
+        stylist.rating = output.data.rows[i].rating;
+        stylist.terms_and_condotions = output.data.rows[i].terms_and_condotions;
+        stylist.skill = [];
+        stylist.busy_date = [];
+
+        var r = syncSql.mysql(
+            connection,
+            "select * from trn_skill where stylist_id = "+stylist.id
+        );
+
+        for (var j =0 ; j<r.data.rows.length;j++){
+
+            stylist.skill.push(r.data.rows[j].skill);
+        }
+        // console.log('-----------');
+        // console.log(stylist.id);
+        // console.log(stylist.skill);
+        // console.log('-----------');
+
+        var q = syncSql.mysql(
+            connection,
+            "select * from trn_busy_date_stylist where stylist_id = "+stylist.id
+        );
+        for (var j =0 ; j<q.data.rows.length;j++){
+
+            stylist.busy_date.push(q.data.rows[j].busy_date);
+
+        }
+        // console.log(q);
+
+        var s = syncSql.mysql(
+            connection,
+            "select type from trn_type, trn_stylist where trn_stylist.type_id = trn_type.id and trn_stylist.id = "+stylist.id
+        );
+        stylist.type = s.data.rows[0].type;
+
         stylistLists.push(stylist);
     }
 
@@ -569,6 +685,12 @@ router.get('/stylist_details/gallery/:id', function(req, res) {
             stylist.gallery.push(base64_encode(path.resolve(r.data.rows[j].image_path)));
         }
         // console.log(r);
+
+        var s = syncSql.mysql(
+            connection,
+            "select type from trn_type, trn_stylist where trn_stylist.type_id = trn_type.id and trn_stylist.id = "+stylist.id
+        );
+        stylist.type = s.data.rows[0].type;
 
         stylistLists.push(stylist);
     }

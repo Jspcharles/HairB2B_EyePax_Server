@@ -1,330 +1,236 @@
--- MySQL Workbench Forward Engineering
+-- phpMyAdmin SQL Dump
+-- version 4.7.4
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Feb 14, 2018 at 11:21 AM
+-- Server version: 10.1.29-MariaDB
+-- PHP Version: 7.1.12
 
-SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
-SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
-
--- -----------------------------------------------------
--- Schema hairb2b
--- -----------------------------------------------------
-
--- -----------------------------------------------------
--- Schema hairb2b
--- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `hairb2b` DEFAULT CHARACTER SET utf8 ;
-USE `hairb2b` ;
-
--- -----------------------------------------------------
--- Table `hairb2b`.`trn_gallery`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `hairb2b`.`trn_gallery` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `path` VARCHAR(500) CHARACTER SET 'utf8' NOT NULL,
-  `profile_id` INT(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  INDEX `fk_trn_gallery_1_idx` (`profile_id` ASC),
-  CONSTRAINT `fk_trn_gallery_1`
-    FOREIGN KEY (`profile_id`)
-    REFERENCES `hairb2b`.`trn_profile` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-AUTO_INCREMENT = 4
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_latvian_ci;
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
+SET time_zone = "+00:00";
 
 
--- -----------------------------------------------------
--- Table `hairb2b`.`trn_user_account`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `hairb2b`.`trn_user_account` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `email` VARCHAR(150) CHARACTER SET 'utf8' NOT NULL,
-  `password` VARCHAR(150) CHARACTER SET 'utf8' NOT NULL,
-  `is_verified` TINYINT(1) NOT NULL,
-  `name` VARCHAR(100) CHARACTER SET 'utf8' NOT NULL,
-  `is_active` TINYINT(1) NOT NULL,
-  `created_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `last_updated_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `last_seen` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 4
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_latvian_ci;
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
 
+--
+-- Database: `hairb2b`
+--
 
--- -----------------------------------------------------
--- Table `hairb2b`.`trn_profile_type`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `hairb2b`.`trn_profile_type` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `type` VARCHAR(150) CHARACTER SET 'utf8' NOT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 3
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_latvian_ci;
+-- --------------------------------------------------------
 
+--
+-- Table structure for table `trn_busy_date_stylist`
+--
 
--- -----------------------------------------------------
--- Table `hairb2b`.`trn_profile`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `hairb2b`.`trn_profile` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `user_id` INT(11) NOT NULL,
-  `profile_type` INT(11) NOT NULL,
-  `is_active` TINYINT(1) NOT NULL,
-  `created_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `profile_pic` INT(11) NULL DEFAULT NULL,
-  `rating` INT(11) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  INDEX `fk_trn_profile_2_idx` (`profile_type` ASC),
-  INDEX `fk_trn_profile_1` (`user_id` ASC),
-  INDEX `fk_profile_pic` (`profile_pic` ASC),
-  CONSTRAINT `fk_profile_pic`
-    FOREIGN KEY (`profile_pic`)
-    REFERENCES `hairb2b`.`trn_gallery` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE CASCADE,
-  CONSTRAINT `fk_trn_profile_1`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `hairb2b`.`trn_user_account` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_trn_profile_2`
-    FOREIGN KEY (`profile_type`)
-    REFERENCES `hairb2b`.`trn_profile_type` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-AUTO_INCREMENT = 4
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_latvian_ci;
+CREATE TABLE `trn_busy_date_stylist` (
+  `id` int(11) NOT NULL,
+  `stylist_id` int(11) NOT NULL,
+  `busy_date` date NOT NULL,
+  `time_slot_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `trn_busy_date_stylist`
+--
 
--- -----------------------------------------------------
--- Table `hairb2b`.`trn_job_role`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `hairb2b`.`trn_job_role` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `role` VARCHAR(100) CHARACTER SET 'utf8' NOT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 4
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_latvian_ci;
+INSERT INTO `trn_busy_date_stylist` (`id`, `stylist_id`, `busy_date`, `time_slot_id`) VALUES
+(1, 1, '2018-02-16', 1),
+(2, 1, '2018-02-22', 2),
+(3, 2, '2018-02-16', 2),
+(4, 2, '2018-02-19', 1);
 
+-- --------------------------------------------------------
 
--- -----------------------------------------------------
--- Table `hairb2b`.`trn_stylist`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `hairb2b`.`trn_stylist` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `profile_id` INT(11) NOT NULL,
-  `job_role` INT(11) NOT NULL,
-  `default_payment_gateway_id` INT(11) NULL DEFAULT NULL,
-  `first_name` VARCHAR(100) CHARACTER SET 'utf8' NULL DEFAULT NULL,
-  `last_name` VARCHAR(100) CHARACTER SET 'utf8' NULL DEFAULT NULL,
-  `address_line_1` VARCHAR(100) CHARACTER SET 'utf8' NULL DEFAULT NULL,
-  `address_line_2` VARCHAR(100) CHARACTER SET 'utf8' NULL DEFAULT NULL,
-  `city` VARCHAR(100) CHARACTER SET 'utf8' NULL DEFAULT NULL,
-  `state` VARCHAR(100) CHARACTER SET 'utf8' NULL DEFAULT NULL,
-  `zip` INT(11) NULL DEFAULT NULL,
-  `country` VARCHAR(100) CHARACTER SET 'utf8' NULL DEFAULT NULL,
-  `telephone` INT(11) NULL DEFAULT NULL,
-  `description` VARCHAR(2000) CHARACTER SET 'utf8' NULL DEFAULT NULL,
-  `terms_and_conditions` VARCHAR(2000) CHARACTER SET 'utf8' NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  INDEX `fk_trn_stylist_1_idx` (`profile_id` ASC),
-  INDEX `fk_trn_stylist_2_idx` (`job_role` ASC),
-  CONSTRAINT `fk_trn_stylist_1`
-    FOREIGN KEY (`profile_id`)
-    REFERENCES `hairb2b`.`trn_profile` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_trn_stylist_2`
-    FOREIGN KEY (`job_role`)
-    REFERENCES `hairb2b`.`trn_job_role` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-AUTO_INCREMENT = 4
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_latvian_ci;
+--
+-- Table structure for table `trn_gallery`
+--
 
+CREATE TABLE `trn_gallery` (
+  `id` int(10) NOT NULL,
+  `stylist_id` int(10) NOT NULL,
+  `image_path` varchar(500) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- -----------------------------------------------------
--- Table `hairb2b`.`trn_time_slot`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `hairb2b`.`trn_time_slot` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) CHARACTER SET 'utf8' NOT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 3
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_latvian_ci;
+-- --------------------------------------------------------
 
+--
+-- Table structure for table `trn_skill`
+--
 
--- -----------------------------------------------------
--- Table `hairb2b`.`trn_busy_date`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `hairb2b`.`trn_busy_date` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `stylist_id` INT(11) NOT NULL,
-  `time_slot_id` INT(11) NOT NULL,
-  `type` VARCHAR(50) CHARACTER SET 'utf8' NOT NULL,
-  `date` DATE NOT NULL,
-  PRIMARY KEY (`id`),
-  INDEX `fk_trn_busy_date_1_idx` (`stylist_id` ASC),
-  INDEX `fk_trn_busy_date_2_idx` (`time_slot_id` ASC),
-  CONSTRAINT `fk_trn_busy_date_1`
-    FOREIGN KEY (`stylist_id`)
-    REFERENCES `hairb2b`.`trn_stylist` (`profile_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_trn_busy_date_2`
-    FOREIGN KEY (`time_slot_id`)
-    REFERENCES `hairb2b`.`trn_time_slot` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_latvian_ci;
+CREATE TABLE `trn_skill` (
+  `id` int(10) NOT NULL,
+  `stylist_id` int(10) NOT NULL,
+  `skill` varchar(500) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `trn_skill`
+--
 
--- -----------------------------------------------------
--- Table `hairb2b`.`trn_charge_per_slot`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `hairb2b`.`trn_charge_per_slot` (
-  `stylist_id` INT(11) NOT NULL,
-  `time_slot_id` INT(11) NOT NULL,
-  `charge` DECIMAL(10,2) NOT NULL,
-  `currency` VARCHAR(45) CHARACTER SET 'utf8' NOT NULL,
-  PRIMARY KEY (`stylist_id`, `time_slot_id`),
-  INDEX `fk_trn_charge_per_slot_2_idx` (`time_slot_id` ASC),
-  CONSTRAINT `fk_trn_charge_per_slot_1`
-    FOREIGN KEY (`stylist_id`)
-    REFERENCES `hairb2b`.`trn_stylist` (`profile_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_trn_charge_per_slot_2`
-    FOREIGN KEY (`time_slot_id`)
-    REFERENCES `hairb2b`.`trn_time_slot` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_latvian_ci;
+INSERT INTO `trn_skill` (`id`, `stylist_id`, `skill`) VALUES
+(1, 1, 'Advanced colouring'),
+(2, 1, 'Colour correction'),
+(3, 2, 'Hair painting'),
+(4, 2, 'Bridal');
 
+-- --------------------------------------------------------
 
--- -----------------------------------------------------
--- Table `hairb2b`.`trn_location`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `hairb2b`.`trn_location` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `city` VARCHAR(45) CHARACTER SET 'utf8' NOT NULL,
-  `state` VARCHAR(45) CHARACTER SET 'utf8' NOT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 9
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_latvian_ci;
+--
+-- Table structure for table `trn_stylist`
+--
 
+CREATE TABLE `trn_stylist` (
+  `id` int(10) NOT NULL,
+  `first_name` varchar(100) NOT NULL,
+  `last_name` varchar(100) NOT NULL,
+  `profile_pic` varchar(500) NOT NULL,
+  `address_line_1` varchar(500) NOT NULL,
+  `address_line_2` varchar(500) NOT NULL,
+  `city` varchar(500) NOT NULL,
+  `state` varchar(500) NOT NULL,
+  `mrng_cost` int(100) NOT NULL,
+  `evng_cost` int(100) NOT NULL,
+  `telephone` int(10) NOT NULL,
+  `description` varchar(1000) NOT NULL,
+  `rating` int(10) NOT NULL,
+  `terms_and_condotions` varchar(1000) NOT NULL,
+  `type_id` int(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- -----------------------------------------------------
--- Table `hairb2b`.`trn_preferred_location`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `hairb2b`.`trn_preferred_location` (
-  `stylist_id` INT(11) NOT NULL,
-  `location_id` INT(11) NOT NULL,
-  PRIMARY KEY (`stylist_id`, `location_id`),
-  INDEX `fk_trn_preferred_location_2_idx` (`location_id` ASC),
-  CONSTRAINT `fk_trn_preferred_location_1`
-    FOREIGN KEY (`stylist_id`)
-    REFERENCES `hairb2b`.`trn_stylist` (`profile_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_trn_preferred_location_2`
-    FOREIGN KEY (`location_id`)
-    REFERENCES `hairb2b`.`trn_location` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_latvian_ci;
+--
+-- Dumping data for table `trn_stylist`
+--
 
+INSERT INTO `trn_stylist` (`id`, `first_name`, `last_name`, `profile_pic`, `address_line_1`, `address_line_2`, `city`, `state`, `mrng_cost`, `evng_cost`, `telephone`, `description`, `rating`, `terms_and_condotions`, `type_id`) VALUES
+(1, 'Joseph ', 'Charles', './public/images/pro_pic_2.jpg', 'Sydney', '', '', '', 150, 200, 770370315, '\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.', 4, '', 2),
+(2, 'Glen', 'Maxwell', './public/images/pro_pic_3.jpg', 'Melbourne', '', '', '', 175, 225, 774075978, '\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,', 3, '', 1);
 
--- -----------------------------------------------------
--- Table `hairb2b`.`trn_salon`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `hairb2b`.`trn_salon` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `profile_id` INT(11) NOT NULL,
-  `profile_pic` INT(11) NOT NULL,
-  `address_line_1` VARCHAR(100) CHARACTER SET 'utf8' NOT NULL,
-  `address_line_2` VARCHAR(100) CHARACTER SET 'utf8' NOT NULL,
-  `city` VARCHAR(100) CHARACTER SET 'utf8' NOT NULL,
-  `state` VARCHAR(100) CHARACTER SET 'utf8' NOT NULL,
-  `zip` INT(11) NOT NULL,
-  `country` VARCHAR(100) CHARACTER SET 'utf8' NOT NULL,
-  `telephone` INT(11) NOT NULL,
-  `description` VARCHAR(2000) CHARACTER SET 'utf8' NOT NULL,
-  `salon_name` VARCHAR(100) CHARACTER SET 'utf8' NOT NULL,
-  `owner_name` VARCHAR(100) CHARACTER SET 'utf8' NOT NULL,
-  `ABN` VARCHAR(100) CHARACTER SET 'utf8' NOT NULL,
-  `g_loc_longitude` DOUBLE NOT NULL,
-  `g_loc_latitude` DOUBLE NOT NULL,
-  PRIMARY KEY (`id`),
-  INDEX `fk_trn_salon_1_idx` (`profile_id` ASC),
-  CONSTRAINT `fk_trn_salon_1`
-    FOREIGN KEY (`profile_id`)
-    REFERENCES `hairb2b`.`trn_profile` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_latvian_ci;
+-- --------------------------------------------------------
 
+--
+-- Table structure for table `trn_time_slot`
+--
 
--- -----------------------------------------------------
--- Table `hairb2b`.`trn_skill`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `hairb2b`.`trn_skill` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `parent_id` INT(11) NOT NULL,
-  `description` VARCHAR(100) CHARACTER SET 'utf8' NOT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 6
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_latvian_ci;
+CREATE TABLE `trn_time_slot` (
+  `id` int(10) NOT NULL,
+  `time_slot` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `trn_time_slot`
+--
 
--- -----------------------------------------------------
--- Table `hairb2b`.`trn_stylist_skill`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `hairb2b`.`trn_stylist_skill` (
-  `stylist_id` INT(11) NOT NULL,
-  `skill_id` INT(11) NOT NULL,
-  PRIMARY KEY (`stylist_id`, `skill_id`),
-  INDEX `fk_trn_stylist_skill_2_idx` (`skill_id` ASC),
-  CONSTRAINT `fk_trn_stylist_skill_1`
-    FOREIGN KEY (`stylist_id`)
-    REFERENCES `hairb2b`.`trn_stylist` (`profile_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_trn_stylist_skill_2`
-    FOREIGN KEY (`skill_id`)
-    REFERENCES `hairb2b`.`trn_skill` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_latvian_ci;
+INSERT INTO `trn_time_slot` (`id`, `time_slot`) VALUES
+(1, 'Morning'),
+(2, 'Evening');
 
+-- --------------------------------------------------------
 
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+--
+-- Table structure for table `trn_type`
+--
+
+CREATE TABLE `trn_type` (
+  `id` int(10) NOT NULL,
+  `type` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `trn_type`
+--
+
+INSERT INTO `trn_type` (`id`, `type`) VALUES
+(1, 'Educator'),
+(2, 'Hairstylist'),
+(3, 'Assistant');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `trn_busy_date_stylist`
+--
+ALTER TABLE `trn_busy_date_stylist`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `trn_gallery`
+--
+ALTER TABLE `trn_gallery`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `trn_skill`
+--
+ALTER TABLE `trn_skill`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `trn_stylist`
+--
+ALTER TABLE `trn_stylist`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `trn_time_slot`
+--
+ALTER TABLE `trn_time_slot`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `trn_type`
+--
+ALTER TABLE `trn_type`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `trn_busy_date_stylist`
+--
+ALTER TABLE `trn_busy_date_stylist`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `trn_gallery`
+--
+ALTER TABLE `trn_gallery`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `trn_skill`
+--
+ALTER TABLE `trn_skill`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `trn_stylist`
+--
+ALTER TABLE `trn_stylist`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `trn_time_slot`
+--
+ALTER TABLE `trn_time_slot`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `trn_type`
+--
+ALTER TABLE `trn_type`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
